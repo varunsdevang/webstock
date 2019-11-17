@@ -1,9 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ username }} {{% endblock %}
-
 {% block content %}
 <div class="container">
-    <h1>you are now logged in</h1>
+<h2 style="text-align: center">{{ name | title }}</h2>
 </div>
+    <div class="row">
+        {% for inv in invs %}
+            <div class="col s6">
+                <div class="card">s
+                    <div class="card-content">
+                        <p>{{ inv.investment_name}}</p>
+                    </div>
+                    <div class="card-action">
+                        <div class="row">
+                            <a href="#" class="col s6" >Amount Invested: </a><p class=" col s12 green accent-3">{{ inv.investment_amount }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
