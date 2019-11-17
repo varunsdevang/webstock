@@ -1,29 +1,24 @@
-{% load staticfiles %}
-{% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Investment Portfolio</title>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+{% extends 'base.html' %}
 
-    <meta charset="UTF-8">
+{% block title %}Login{% endblock %}
 
-    <title>T</title>
-</head>
-<body>
-    <title>Investment Portfolio-Login</title>
-</head>
-<body>
-<nav class="red accent-4">
-    <div class="container nav-wrapper" >
-        <a href="#" class="brand-logo">Investment Portfolio<i class="material-icons medium" style="font-size:30px">insert_chart</i</h3>
-
+{% block content %}
+<div class="container">
+    <div class="row>">
+  <h2>Login</h2>
     </div>
-</nav>
-
-</body>
-</html>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+      <div class="row">
+      <input type="text" name="username" placeholder="username"><br>
+      </div>
+      <div class="row">
+      <input type="password" name="password" placeholder="password"><br>
+      </div>
+        <button class="btn waves-effect waves-light" type="submit" name="action">Submit
+            <i class="material-icons right">send</i>
+        </button>
+  </form>
+</div>
+{% endblock %}

@@ -1,13 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-import json
+from .models import User, Portfolio, Stock, Bonds, MutualFunds, HedgeFunds, Cash
 
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'base.html')
+    if 'username' in request.COOKIES:
+        print(request.COOKIES)
+        return render(request, 'base.html')
+    else:
+        return render(request, 'login.html')
 
 
-def login(request):
-    return render(request, 'login.html')
+
