@@ -9,8 +9,10 @@ from django.utils import timezone
 
 def home(request):
     if 'username' in request.COOKIES:
-        print(request.COOKIES)
-        return render(request, 'base.html')
+        # print(request.COOKIES)
+
+
+        return render(request, 'loggedin.html', )
     else:
         return render(request, 'login.html')
 
@@ -20,9 +22,9 @@ def login(request):
         # print(request.POST['username'], request.POST['password'])
         for i in User.objects.all():
             if request.POST['username'] == i.user_Name:
-                print(i.user_Name,i.user_Password)
+                print(i.user_Name, i.user_Password)
                 if request.POST['password'] == i.user_Password:
-                    response = render(request, 'base.html')
+                    response = render(request, 'base.html', context={'username': i.user_Name})
                     response.set_cookie('last_connection', timezone.now())
                     response.set_cookie('username', i.user_Name)
                     return response
