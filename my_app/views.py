@@ -51,24 +51,64 @@ def login(request):
 
 
 def register(request):
-    if request.method=="GET":
-        return render(request,'register.html')
-    if request.method=='POST':
-        form=request.POST
+    if request.method == "GET":
+        return render(request, 'register.html')
+    if request.method == 'POST':
+        form = request.POST
         print(form)
 
         for i in User.users.all():
-            if form['username']==i.user_Name:
-                message="User already Exists"
-                return render(request,'register.html',context={'message':message})
-        if int(form['age'])<18 or int(form['age'])>99:
-            message="invalid Age"
-            return render(request,'register.html',context={'message':message})
+            if form['username'] == i.user_Name:
+                message = "User already Exists"
+                return render(request, 'register.html', context={'message': message})
+        if int(form['age']) < 18 or int(form['age']) > 99:
+            message = "invalid Age"
+            return render(request, 'register.html', context={'message': message})
         print(form)
-        user=User.users.create(user_Name=form['username'],user_DOB=form['age'],user_Password=form['password'],user_Email=form['emailid'])
-        Portfolio.ports.create(user_Portfolio=user,port_Name=form['portfolioname'])
+        user = User.users.create(user_Name=form['username'], user_DOB=form['age'], user_Password=form['password'],
+                                 user_Email=form['emailid'])
+        Portfolio.ports.create(user_Portfolio=user, port_Name=form['portfolioname'])
+        return render(request, 'login.html')
+
+
+def delete(request, inv_id):
+    if request.method == "POST":
+        invs = Investment.investments.all()
+        print("----------------delete------------------")
+        print(inv_id)
+        user = User.users.get(user_Name=request.COOKIES['username'])
+        port = Portfolio.ports.get(user_Portfolio=user)
+        invs = Investment.investments.filter(investment_parent=port)
+        for i in invs:
+
+            if i.investment_name == inv_id or inv_id in i.investment_name:
+
+                i.delete()
+
         return redirect('/')
 
 
+def add_inv(request):
+    if request.method == "GET":
+        return render(request, 'invest.html')
+
+    if request.method == "POST":
+        form = request.POST
+        username=request.COOKIES['username']
+        user = User.users.get(user_Name=username)
+        port = Portfolio.ports.get(user_Portfolio=user)
+        if len(form['inv_name']) == 0:
+            message = "Invalid Name"
+            return render(request, 'invest.html', context={'message': message})
+        Investment.investments.create(investment_parent=port, investment_name=form['inv_name'],
+                                      investment_amount=form['inv_amount'], return_rate=form['return'],
+                                      investment_date=form['inv_date'])
+        return redirect('/')
 
 
+def graph(request):
+    user = User.users.get(user_Name=request.COOKIES['username'])
+    port = Portfolio.ports.get(user_Portfolio=user)
+    invs = Investment.investments.filter(investment_parent=port)
+    context={'invs':invs}
+    return  render(request,'graph1.html',context=context)
